@@ -176,7 +176,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void resetPassword(String password) throws UserException {
-        if
+
     }
 
     //Vo to Do
