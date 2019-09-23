@@ -67,6 +67,7 @@ public class InitialController extends BaseController {
 
     //重置密码
     @RequestMapping("resetPass")
+    @Transactional(rollbackFor = Exception.class)
     public CommonReturnType resetPass(@RequestParam(value = "password")String password){
         return CommonReturnType.create(null);
     }

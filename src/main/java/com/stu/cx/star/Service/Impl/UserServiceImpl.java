@@ -176,6 +176,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void resetPassword(String password) throws UserException {
+        //密码是否为空校验
+        if(StringUtils.isEmpty(password)){
+            throw new UserException(EmException.PARAMETER_VALIDATION_ERROR,"密码不能为空");
+        }
+        //对重置的密码进行加密
+        String newPass = MD5Util.encrpt(password);
+        //更新数据库操作
 
     }
 
