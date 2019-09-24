@@ -5,7 +5,7 @@ import javax.validation.constraints.NotBlank;
 
 /**
  * @Author: riskychan
- * @Description:登录的校验
+ * @Description:encapuslation login obejct
  * @Date: Create in 16:24 2019/9/18
  */
 public class LoginVo {

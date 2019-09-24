@@ -4,7 +4,7 @@ import javax.validation.constraints.NotBlank;
 
 /**
  * @Author: riskychan
- * @Description:忘记密码重置操作
+ * @Description:forget password ,reset password
  * @Date: Create in 16:31 2019/9/20
  */
 public class ForgetPasswordVo {

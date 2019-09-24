@@ -1,9 +1,11 @@
 package com.stu.cx.star.Service.Impl;
 
+import com.google.gson.Gson;
 import com.stu.cx.star.Controller.Vo.ForgetPasswordVo;
 import com.stu.cx.star.Controller.Vo.RegisterVo;
 import com.stu.cx.star.Redis.RedisServer;
 import com.stu.cx.star.Util.OtpUtil;
+import com.stu.cx.star.Util.UUIDUtil;
 import com.stu.cx.star.Validation.ValidationResult;
 import com.stu.cx.star.Validation.Validator;
 import com.stu.cx.star.Controller.Vo.LoginVo;
@@ -25,11 +27,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 
 /**
  * @Author: riskychan
- * @Description:用户相关接口实现
+ * @Description:operate for login  register password
  * @Date: Create in 16:10 2019/9/18
  */
 @Service
@@ -50,9 +54,9 @@ public class UserServiceImpl implements UserService {
     private String sender;
 
     @Override
-    public void login(LoginVo loginVo) throws UserException {
+    public void login(HttpServletResponse response, LoginVo loginVo) throws UserException {
         ValidationResult result = validator.validate(loginVo);
-        //校验参数
+        //invalidate params
         if(result.isHasError()){
             throw new UserException(EmException.PARAMETER_VALIDATION_ERROR,result.getErrMsg());
         }
@@ -65,8 +69,25 @@ public class UserServiceImpl implements UserService {
         String dbpass = login.getPassword();
         if(!StringUtils.equals(pass,dbpass)){
             throw new UserException(EmException.PASSWORD_ERROR);
+        }else{
+            //convert model to json
+            Gson gson = new Gson();
+            String modelJson = gson.toJson(login);
+            logger.info(modelJson);
+            //login success then create token and add token to cookie
+            String token = UUIDUtil.uuid();
+            addToken(response,token,modelJson);
         }
 
+    }
+    //add token to redis and cookie
+    public void addToken(HttpServletResponse response,String token,String json){
+        redisServer.setToken(token,json);
+        Cookie cookie = new Cookie("token",token);
+        //need to improve, should use a varilable to define time or age
+        cookie.setMaxAge(3600*24*2);
+        cookie.setPath("/");
+        response.addCookie(cookie);
     }
 
     @Override
@@ -75,7 +96,7 @@ public class UserServiceImpl implements UserService {
         if(StringUtils.isEmpty(mail)){
             throw new UserException(EmException.MAIL_EMPTY);
         }
-        //获取验证码
+        //get otp
         String val = OtpUtil.getMailOtp();
 
         SimpleMailMessage message = new SimpleMailMessage();
@@ -98,19 +119,19 @@ public class UserServiceImpl implements UserService {
         if(validationResult.isHasError()){
             throw  new UserException(EmException.PARAMETER_VALIDATION_ERROR,validationResult.getErrMsg());
         }
-        //判断是否勾选已阅读协议
+        //is agreement?
         if(registerVo.isAgreement()){
-            //手机号已经存在
+            //mobile is exist
             Login isMobileLogin  = loginMapper.selectByMobile(registerVo.getMobile());
             if(isMobileLogin != null){
                 throw new UserException(EmException.USER_ISEXIST);
             }
-            //邮箱已经存在
+            //mail is exist
             Login isMailLogin = loginMapper.selectByMail(registerVo.getMail());
             if(isMailLogin != null){
                 throw new UserException(EmException.EMAIL_ISEXIST);
             }
-            //获取缓存中的验证码
+            //get otp
             String otp = redisServer.getRegisterOtp(registerVo.getMail());
             if(StringUtils.isEmpty(otp)){
                 throw new UserException(EmException.OTP_OUT_TIME);
@@ -128,11 +149,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void getForgetOtp(String mail) throws UserException {
-        //参数校验
+        //invalidate params
         if(StringUtils.isEmpty(mail)){
             throw  new UserException(EmException.MAIL_EMPTY);
         }
-        //判断输入的邮箱是否存在
+        //mail is eists?
         Login login = loginMapper.selectByMail(mail);
         if(login == null){
             logger.info("当前Login为null");
@@ -155,26 +176,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void forgetPass(ForgetPasswordVo forgetPasswordVo) throws UserException {
-        //对输入的参数先进行校验
+        //invalidate params
         ValidationResult validationResult = validator.validate(forgetPasswordVo);
         if(validationResult.isHasError()){
             throw new UserException(EmException.PARAMETER_VALIDATION_ERROR,validationResult.getErrMsg());
         }
-        //判断输入的邮箱是否存在
+        //mail is exist?
         Login login = loginMapper.selectByMail(forgetPasswordVo.getEmail());
         if(login == null){
             throw  new UserException(EmException.MAIL_IS_NOTEXIST);
         }
-        //对验证码进行校验
+        //to invaild otp
         String otp = redisServer.getFindPasswordOtp(forgetPasswordVo.getEmail());
         if(StringUtils.isEmpty(otp)){
             throw new UserException(EmException.OTP_OUT_TIME,"验证码失效，请重新获取");
         } else if(!StringUtils.equals(otp,forgetPasswordVo.getOtp())){
             throw new UserException(EmException.OTP_ERROR);
         }
-        //对密码进行加密
+        //encrpt password
         String newPass = MD5Util.encrpt(forgetPasswordVo.getPassword());
-        //更新对应的数据库
+        //update database
         loginMapper.updateByMail(forgetPasswordVo.getEmail(),newPass);
     }
 
@@ -183,12 +204,11 @@ public class UserServiceImpl implements UserService {
         if(registerVo == null){
             return null;
         }
-        //存入数据的密码需要先进行MD5加密
+        //encrpt password
         String tempPass = MD5Util.encrpt(registerVo.getPassword());
         registerVo.setPassword(tempPass);
         Login login = new Login();
         BeanUtils.copyProperties(registerVo,login);
-        //因为这里把盐给写死了
         login.setSalt("1a2b3c4d5f");
         return login;
     }

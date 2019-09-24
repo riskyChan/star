@@ -14,7 +14,7 @@ import java.util.Map;
 
 /**
  * @Author: riskychan
- * @Description:异常的处理器
+ * @Description:to hanlde Exception
  * @Date: Create in 18:13 2019/9/18
  */
 public class BaseController {

@@ -2,7 +2,7 @@ package com.stu.cx.star.Exception;
 
 /**
  * @Author: riskychan
- * @Description:目前可能遇到异常的枚举实现
+ * @Description:some exception
  * @Date: Create in 16:37 2019/9/18
  */
 public enum EmException implements  CommonException {

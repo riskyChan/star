@@ -2,7 +2,7 @@ package com.stu.cx.star.Exception;
 
 /**
  * @Author: riskychan
- * @Description:统一的异常接口
+ * @Description:the common exception
  * @Date: Create in 16:35 2019/9/18
  */
 

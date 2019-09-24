@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @Author: riskychan
- * @Description:用户登录，注册，找回密码出现的异常处理
+ * @Description:exception for login,register,foret password
  * @Date: Create in 16:39 2019/9/18
  */
 public class UserException extends Exception implements CommonException  {

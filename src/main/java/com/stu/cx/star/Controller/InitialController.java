@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * @Author: riskychan
  * @Description:登录，注册，找回密码等相关的控制器
@@ -27,12 +29,12 @@ public class InitialController extends BaseController {
 
     //登录
     @RequestMapping("login")
-    public CommonReturnType login(@RequestParam(value = "mobile")String mobile,
+    public CommonReturnType login(HttpServletResponse response, @RequestParam(value = "mobile")String mobile,
                                   @RequestParam(value = "password")String password) throws UserException {
         LoginVo loginVo = new LoginVo();
         loginVo.setMobile(mobile);
         loginVo.setPassword(password);
-        userService.login(loginVo);
+        userService.login(response,loginVo);
         return CommonReturnType.create(null);
     }
 

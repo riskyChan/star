@@ -8,7 +8,7 @@ import redis.clients.jedis.JedisPoolConfig;
 
 /**
  * @Author: riskychan
- * @Description:创建jedis实体
+ * @Description:to create jedis
  * @Date: Create in 10:07 2019/9/20
  */
 @Service

@@ -4,7 +4,7 @@ import org.springframework.validation.ObjectError;
 
 /**
  * @Author: riskychan
- * @Description:返回前端格式
+ * @Description:return common type
  * @Date: Create in 15:40 2019/9/18
  */
 public class CommonReturnType {

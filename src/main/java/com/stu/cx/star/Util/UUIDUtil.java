@@ -4,7 +4,7 @@ import java.util.UUID;
 
 /**
  * @Author: riskychan
- * @Description:生成token
+ * @Description:create token by uuid
  * @Date: Create in 15:04 2019/9/18
  */
 public class UUIDUtil {

@@ -4,7 +4,7 @@ import javax.validation.constraints.NotBlank;
 
 /**
  * @Author: riskychan
- * @Description:注册校验的封装类
+ * @Description:encapsulation register object
  * @Date: Create in 10:34 2019/9/19
  */
 public class RegisterVo {

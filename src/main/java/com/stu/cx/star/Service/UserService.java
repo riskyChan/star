@@ -6,26 +6,28 @@ import com.stu.cx.star.Controller.Vo.RegisterVo;
 import com.stu.cx.star.Exception.UserException;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * @Author: riskychan
- * @Description:用户注册登录等相关抽象类
+ * @Description:interface for login ,resgister,forget password
  * @Date: Create in 16:09 2019/9/18
  */
 public interface UserService {
 
-    //登录
-    public void login(LoginVo loginVo) throws UserException;
+    //login
+    public void login(HttpServletResponse response, LoginVo loginVo) throws UserException;
 
-    //获取邮箱验证码
+    //register otp
     public void getMailOtp(String mail) throws UserException;
 
-    //注册
+    //register
     public void register(RegisterVo registerVo) throws UserException;
 
-    //获取找回密码的验证码
+    //forget password top
     public void getForgetOtp(String mail) throws UserException;
 
-    //重置密码
+    //reset password
     public void forgetPass(ForgetPasswordVo forgetPasswordVo) throws UserException;
 
 }
