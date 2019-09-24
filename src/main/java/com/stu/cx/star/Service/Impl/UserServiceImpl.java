@@ -5,6 +5,7 @@ import com.stu.cx.star.Controller.Vo.ForgetPasswordVo;
 import com.stu.cx.star.Controller.Vo.RegisterVo;
 import com.stu.cx.star.Redis.RedisServer;
 import com.stu.cx.star.Util.OtpUtil;
+import com.stu.cx.star.Util.TokenUtil;
 import com.stu.cx.star.Util.UUIDUtil;
 import com.stu.cx.star.Validation.ValidationResult;
 import com.stu.cx.star.Validation.Validator;
@@ -15,6 +16,7 @@ import com.stu.cx.star.Exception.EmException;
 import com.stu.cx.star.Exception.UserException;
 import com.stu.cx.star.Service.UserService;
 import com.stu.cx.star.Util.MD5Util;
+import jdk.nashorn.internal.parser.Token;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +56,7 @@ public class UserServiceImpl implements UserService {
     private String sender;
 
     @Override
-    public void login(HttpServletResponse response, LoginVo loginVo) throws UserException {
+    public String login(LoginVo loginVo) throws UserException {
         ValidationResult result = validator.validate(loginVo);
         //invalidate params
         if(result.isHasError()){
@@ -75,19 +77,15 @@ public class UserServiceImpl implements UserService {
             String modelJson = gson.toJson(login);
             logger.info(modelJson);
             //login success then create token and add token to cookie
-            String token = UUIDUtil.uuid();
-            addToken(response,token,modelJson);
+            String token = TokenUtil.getToken(login);
+            addToken(token,modelJson);
+            return token;
         }
 
     }
     //add token to redis and cookie
-    public void addToken(HttpServletResponse response,String token,String json){
+    public void addToken(String token,String json){
         redisServer.setToken(token,json);
-        Cookie cookie = new Cookie("token",token);
-        //need to improve, should use a varilable to define time or age
-        cookie.setMaxAge(3600*24*2);
-        cookie.setPath("/");
-        response.addCookie(cookie);
     }
 
     @Override

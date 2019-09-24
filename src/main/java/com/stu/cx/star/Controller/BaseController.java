@@ -4,6 +4,7 @@ import com.stu.cx.star.Exception.EmException;
 import com.stu.cx.star.Exception.UserException;
 import com.stu.cx.star.Response.CommonReturnType;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -17,6 +18,7 @@ import java.util.Map;
  * @Description:to hanlde Exception
  * @Date: Create in 18:13 2019/9/18
  */
+@CrossOrigin(allowCredentials = "true" ,allowedHeaders = "*")
 public class BaseController {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.OK)

@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 public interface UserService {
 
     //login
-    public void login(HttpServletResponse response, LoginVo loginVo) throws UserException;
+    public String login(LoginVo loginVo) throws UserException;
 
     //register otp
     public void getMailOtp(String mail) throws UserException;

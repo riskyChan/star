@@ -1,5 +1,6 @@
 package com.stu.cx.star.Controller;
 
+import com.stu.cx.star.Annotation.LoginToken;
 import com.stu.cx.star.Controller.Vo.ForgetPasswordVo;
 import com.stu.cx.star.Controller.Vo.LoginVo;
 import com.stu.cx.star.Controller.Vo.RegisterVo;
@@ -29,13 +30,13 @@ public class InitialController extends BaseController {
 
     //登录
     @RequestMapping("login")
-    public CommonReturnType login(HttpServletResponse response, @RequestParam(value = "mobile")String mobile,
+    public CommonReturnType login(@RequestParam(value = "mobile")String mobile,
                                   @RequestParam(value = "password")String password) throws UserException {
         LoginVo loginVo = new LoginVo();
         loginVo.setMobile(mobile);
         loginVo.setPassword(password);
-        userService.login(response,loginVo);
-        return CommonReturnType.create(null);
+        String token = userService.login(loginVo);
+        return CommonReturnType.create(token);
     }
 
     //获取登录验证码
@@ -60,11 +61,12 @@ public class InitialController extends BaseController {
         return CommonReturnType.create(null);
     }
 
-    //充值密码
+    //reset password
     @PostMapping("forgetPass")
     @Transactional(rollbackFor = Exception.class)
     public CommonReturnType forgetPass(@RequestBody ForgetPasswordVo passwordVo) throws UserException {
         userService.forgetPass(passwordVo);
         return CommonReturnType.create(null);
     }
+
 }
