@@ -284,6 +284,12 @@
     </if>
   </update>
 
+  <update id="updateByMail">
+    update login
+    set password = #{password}
+    where mail = #{mail}
+  </update>
+
   <update id="updateByPrimaryKeySelective" parameterType="com.stu.cx.star.Entity.Login">
     <!--
       WARNING - @mbg.generated

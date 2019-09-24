@@ -58,17 +58,11 @@ public class InitialController extends BaseController {
         return CommonReturnType.create(null);
     }
 
-    //找回密码下一步
+    //充值密码
     @PostMapping("forgetPass")
+    @Transactional(rollbackFor = Exception.class)
     public CommonReturnType forgetPass(@RequestBody ForgetPasswordVo passwordVo) throws UserException {
         userService.forgetPass(passwordVo);
-        return CommonReturnType.create(null);
-    }
-
-    //重置密码
-    @RequestMapping("resetPass")
-    @Transactional(rollbackFor = Exception.class)
-    public CommonReturnType resetPass(@RequestParam(value = "password")String password){
         return CommonReturnType.create(null);
     }
 }

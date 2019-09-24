@@ -25,9 +25,7 @@ public interface UserService {
     //获取找回密码的验证码
     public void getForgetOtp(String mail) throws UserException;
 
-    //找回密码
+    //重置密码
     public void forgetPass(ForgetPasswordVo forgetPasswordVo) throws UserException;
 
-    //重置密码
-    public void resetPassword(String password) throws UserException;
 }

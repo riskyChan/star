@@ -12,6 +12,8 @@ public class ForgetPasswordVo {
     private String email;
     @NotBlank(message = "验证码不能为空")
     private String otp;
+    @NotBlank(message = "新密码不能为空")
+    private String password;
 
     public String getEmail() {
         return email;
@@ -27,5 +29,13 @@ public class ForgetPasswordVo {
 
     public void setOtp(String otp) {
         this.otp = otp;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
