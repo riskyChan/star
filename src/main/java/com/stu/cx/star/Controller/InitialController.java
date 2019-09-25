@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -30,12 +31,12 @@ public class InitialController extends BaseController {
 
     //登录
     @RequestMapping("login")
-    public CommonReturnType login(@RequestParam(value = "mobile")String mobile,
+    public CommonReturnType login(HttpServletRequest request, @RequestParam(value = "mobile")String mobile,
                                   @RequestParam(value = "password")String password) throws UserException {
         LoginVo loginVo = new LoginVo();
         loginVo.setMobile(mobile);
         loginVo.setPassword(password);
-        String token = userService.login(loginVo);
+        String token = userService.login(request,loginVo);
         return CommonReturnType.create(token);
     }
 

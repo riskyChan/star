@@ -6,6 +6,7 @@ import com.stu.cx.star.Controller.Vo.RegisterVo;
 import com.stu.cx.star.Exception.UserException;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -16,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 public interface UserService {
 
     //login
-    public String login(LoginVo loginVo) throws UserException;
+    public String login(HttpServletRequest request,LoginVo loginVo) throws UserException;
 
     //register otp
     public void getMailOtp(String mail) throws UserException;

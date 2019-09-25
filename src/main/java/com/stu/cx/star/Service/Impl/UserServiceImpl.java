@@ -3,10 +3,10 @@ package com.stu.cx.star.Service.Impl;
 import com.google.gson.Gson;
 import com.stu.cx.star.Controller.Vo.ForgetPasswordVo;
 import com.stu.cx.star.Controller.Vo.RegisterVo;
+import com.stu.cx.star.Dao.LoginLogMapper;
+import com.stu.cx.star.Entity.LoginLog;
 import com.stu.cx.star.Redis.RedisServer;
-import com.stu.cx.star.Util.OtpUtil;
-import com.stu.cx.star.Util.TokenUtil;
-import com.stu.cx.star.Util.UUIDUtil;
+import com.stu.cx.star.Util.*;
 import com.stu.cx.star.Validation.ValidationResult;
 import com.stu.cx.star.Validation.Validator;
 import com.stu.cx.star.Controller.Vo.LoginVo;
@@ -15,7 +15,6 @@ import com.stu.cx.star.Entity.Login;
 import com.stu.cx.star.Exception.EmException;
 import com.stu.cx.star.Exception.UserException;
 import com.stu.cx.star.Service.UserService;
-import com.stu.cx.star.Util.MD5Util;
 import jdk.nashorn.internal.parser.Token;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -30,7 +29,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 
 
 /**
@@ -47,6 +48,8 @@ public class UserServiceImpl implements UserService {
     private Validator validator;
     @Resource
     private  LoginMapper loginMapper;
+    @Resource
+    private LoginLogMapper loginLogMapper;
     @Autowired
     private JavaMailSender javaMailSender;
     @Autowired
@@ -56,7 +59,7 @@ public class UserServiceImpl implements UserService {
     private String sender;
 
     @Override
-    public String login(LoginVo loginVo) throws UserException {
+    public String login(HttpServletRequest request,LoginVo loginVo) throws UserException {
         ValidationResult result = validator.validate(loginVo);
         //invalidate params
         if(result.isHasError()){
@@ -75,6 +78,7 @@ public class UserServiceImpl implements UserService {
             //convert model to json
             Gson gson = new Gson();
             String modelJson = gson.toJson(login);
+            addLoginLog(request,login.getMobile());
             logger.info(modelJson);
             //login success then create token and add token to cookie
             String token = TokenUtil.getToken(login);
@@ -209,5 +213,14 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(registerVo,login);
         login.setSalt("1a2b3c4d5f");
         return login;
+    }
+
+    //add login information to login log
+    public void addLoginLog(HttpServletRequest request,String mobile){
+        LoginLog loginLog = new LoginLog();
+        loginLog.setLoginIp(request.getLocalAddr());
+        loginLog.setMobile(mobile);
+        loginLog.setLoginTime(DateUtil.getCurrentTime());
+        loginLogMapper.insertSelective(loginLog);
     }
 }
