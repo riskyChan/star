@@ -15,7 +15,6 @@ import com.stu.cx.star.Entity.Login;
 import com.stu.cx.star.Exception.EmException;
 import com.stu.cx.star.Exception.UserException;
 import com.stu.cx.star.Service.UserService;
-import jdk.nashorn.internal.parser.Token;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,10 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
 
 
 /**

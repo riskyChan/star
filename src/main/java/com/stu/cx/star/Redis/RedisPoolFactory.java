@@ -20,7 +20,7 @@ public class RedisPoolFactory {
         jedisPoolConfig.setMaxTotal(10);
         jedisPoolConfig.setMaxWaitMillis(3000);
         jedisPoolConfig.setTestOnBorrow(false);
-        JedisPool jp =  new JedisPool(jedisPoolConfig,"192.168.35.188",6379,3000,"ipanel",0);
+        JedisPool jp =  new JedisPool(jedisPoolConfig,"192.168.35.188",6379,3000,"ipanel",1);
         return jp;
     }
 }

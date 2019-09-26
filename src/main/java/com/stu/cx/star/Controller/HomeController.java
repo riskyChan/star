@@ -1,6 +1,7 @@
 package com.stu.cx.star.Controller;
 
 import com.stu.cx.star.Annotation.LoginToken;
+import com.stu.cx.star.Controller.Vo.ArticleVo;
 import com.stu.cx.star.Controller.Vo.LoginLogVo;
 import com.stu.cx.star.Exception.UserException;
 import com.stu.cx.star.Response.CommonReturnType;
@@ -8,11 +9,10 @@ import com.stu.cx.star.Service.HomeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -36,5 +36,20 @@ public class HomeController extends BaseController {
         logger.info("endTime:"+endTime);
         List<LoginLogVo> loginLogs = homeService.getLoginLog(mobile,startTime,endTime);
         return CommonReturnType.create(loginLogs);
+    }
+
+    @PostMapping("/publishArticle")
+    @LoginToken
+    @Transactional(rollbackFor = Exception.class)
+    public CommonReturnType publishArticle(@RequestBody ArticleVo articleVo, HttpServletRequest request) throws UserException {
+        homeService.publishArticle(articleVo,request);
+        return CommonReturnType.create(null);
+    }
+
+    @GetMapping("/getArticle")
+    @LoginToken
+    public CommonReturnType getArticle(HttpServletRequest request){
+        List<String> list = homeService.getArticleList(request);
+        return CommonReturnType.create(list);
     }
 }

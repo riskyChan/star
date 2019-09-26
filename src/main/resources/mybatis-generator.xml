@@ -44,5 +44,6 @@
         <!--生成对应表及类-->
         <table tableName="login" domainObjectName="Login"></table>
         <table tableName="login_log" domainObjectName="LoginLog"></table>
+        <table tableName="article" domainObjectName="Article"></table>
     </context>
 </generatorConfiguration>

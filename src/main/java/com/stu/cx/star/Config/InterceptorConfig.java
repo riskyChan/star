@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * @Author: riskychan
- * @Description: to Cinfig interceptor
+ * @Description: to Config interceptor
  * @Date: Create in 14:58 2019/9/24
  */
 @Configuration

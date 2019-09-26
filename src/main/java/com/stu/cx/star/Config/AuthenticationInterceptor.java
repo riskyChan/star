@@ -64,6 +64,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 gson = new Gson();
                 Login login = gson.fromJson(json,Login.class);
                 if(login == null){
+                    //to deal with cross
                     response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
                     response.setHeader("Access-Control-Allow-Methods", "*");
                     response.setHeader("Access-Control-Max-Age", "3600");
@@ -75,6 +76,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 try{
                     jwtVerifier.verify(token);
                 }catch (JWTCreationException e){
+                    //to deal with cross
                     response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
                     response.setHeader("Access-Control-Allow-Methods", "*");
                     response.setHeader("Access-Control-Max-Age", "3600");
