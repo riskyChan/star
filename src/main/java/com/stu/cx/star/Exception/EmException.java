@@ -7,7 +7,7 @@ package com.stu.cx.star.Exception;
  */
 public enum EmException implements  CommonException {
     PARAMETER_VALIDATION_ERROR(10001,"参数不合法"),
-    UNKNOW_ERROR(10002,"未知错误"),
+    UNKNOW_ERROR(10002,"数据库问题，目前不会解决，请重新操作"),
     NOT_TOOKEN(10003,"token不存在，请重新登录"),
     TOOKEN_ERROR(10004,"token无效，请重新登录"),
     USER_NOT_EXIST(20001,"用户不存在"),
