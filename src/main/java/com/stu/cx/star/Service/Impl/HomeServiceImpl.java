@@ -3,6 +3,7 @@ package com.stu.cx.star.Service.Impl;
 import com.google.gson.Gson;
 import com.stu.cx.star.Controller.Vo.ArticleVo;
 import com.stu.cx.star.Controller.Vo.LoginLogVo;
+import com.stu.cx.star.Controller.Vo.ShowArticleVo;
 import com.stu.cx.star.Dao.ArticleMapper;
 import com.stu.cx.star.Dao.LoginLogMapper;
 import com.stu.cx.star.Entity.Article;
@@ -18,12 +19,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * @Author: riskychan
@@ -89,13 +93,27 @@ public class HomeServiceImpl implements HomeService {
     }
 
     @Override
-    public List<String> getArticleList(HttpServletRequest request) {
+    public List<ShowArticleVo> getArticleList(HttpServletRequest request) {
         String token = request.getHeader("token");
         String userInfo = redisServer.getToken(token);
         gson = new Gson();
         Login login = gson.fromJson(userInfo,Login.class);
         List<String> list = redisServer.getUserArticle(login.getMobile());
-        return list;
+        //将json格式转化成Article，这里用迭代器的方式，因为要根据时间，所以用ListIterator逆向
+        List<ShowArticleVo> articleList = new LinkedList<>();
+        Article article = null;
+        ShowArticleVo showArticleVo = null;
+        ListIterator listIterator = list.listIterator();
+        //先把迭代器指向最后
+        while(listIterator.hasNext()){
+            listIterator.next();
+        }
+        while (listIterator.hasPrevious()){
+            article = gson.fromJson(listIterator.previous().toString(),Article.class);
+            showArticleVo = convertArticlToShowArtilce(article);
+            articleList.add(showArticleVo);
+        }
+        return articleList;
     }
 
     //LoginLog to LoginLogVo
@@ -125,5 +143,15 @@ public class HomeServiceImpl implements HomeService {
         article.setPublishTime(DateUtil.getCurrentTime());
         article.setPublisherId(id);
         return article;
+    }
+
+    //Article to ShowArtilce
+    public ShowArticleVo convertArticlToShowArtilce(Article article){
+        if(article == null){
+            return null;
+        }
+        ShowArticleVo showArticleVo = new ShowArticleVo();
+        BeanUtils.copyProperties(article,showArticleVo);
+        return showArticleVo;
     }
 }

@@ -3,6 +3,8 @@ package com.stu.cx.star.Controller;
 import com.stu.cx.star.Annotation.LoginToken;
 import com.stu.cx.star.Controller.Vo.ArticleVo;
 import com.stu.cx.star.Controller.Vo.LoginLogVo;
+import com.stu.cx.star.Controller.Vo.ShowArticleVo;
+import com.stu.cx.star.Entity.Article;
 import com.stu.cx.star.Exception.UserException;
 import com.stu.cx.star.Response.CommonReturnType;
 import com.stu.cx.star.Service.HomeService;
@@ -49,7 +51,7 @@ public class HomeController extends BaseController {
     @GetMapping("/getArticle")
     @LoginToken
     public CommonReturnType getArticle(HttpServletRequest request){
-        List<String> list = homeService.getArticleList(request);
+        List<ShowArticleVo> list = homeService.getArticleList(request);
         return CommonReturnType.create(list);
     }
 }

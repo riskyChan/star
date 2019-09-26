@@ -2,6 +2,8 @@ package com.stu.cx.star.Service;
 
 import com.stu.cx.star.Controller.Vo.ArticleVo;
 import com.stu.cx.star.Controller.Vo.LoginLogVo;
+import com.stu.cx.star.Controller.Vo.ShowArticleVo;
+import com.stu.cx.star.Entity.Article;
 import com.stu.cx.star.Exception.UserException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,5 +23,5 @@ public interface HomeService {
     public void publishArticle(ArticleVo articleVo, HttpServletRequest request) throws UserException;
 
     //获取该用户的文章列表
-    public List<String> getArticleList(HttpServletRequest request);
+    public List<ShowArticleVo> getArticleList(HttpServletRequest request);
 }
