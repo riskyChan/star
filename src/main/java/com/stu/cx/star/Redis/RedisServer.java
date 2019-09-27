@@ -122,7 +122,7 @@ public class RedisServer {
         return null;
     }
 
-    //设置发布的文章到缓存
+    //设置发布的文章到缓存，后面几个方法和这可以优化整合成2个方法，后期抽空处理
     public boolean setUserArticle(String mobile,String data){
         try{
             jedis = jedisPool.getResource();

@@ -215,4 +215,35 @@ public class HomeServiceImpl implements HomeService {
             }
         }
     }
+
+    //同上
+    public Article getEditArt(String mobile,Integer id){
+        List<String> list = redisServer.getEditingArticle(mobile);
+        Iterator iterator = list.iterator();
+        Article article = null;
+        while (iterator.hasNext()){
+            String temp = iterator.next().toString();
+            gson = new Gson();
+            article = gson.fromJson(temp,Article.class);
+            if(article.getId().equals(id)){
+                return article;
+            }
+        }
+        return null;
+    }
+    //同上
+    public Article getPubArt(String mobile,Integer id){
+        List<String> list = redisServer.getUserArticle(mobile);
+        Iterator iterator = list.iterator();
+        Article article = null;
+        while (iterator.hasNext()){
+            String temp = iterator.next().toString();
+            gson = new Gson();
+            article = gson.fromJson(temp,Article.class);
+            if(article.getId().equals(id)){
+                return article;
+            }
+        }
+        return null;
+    }
 }

@@ -8,7 +8,6 @@ package com.stu.cx.star.Controller.Vo;
 public class ShowArticleVo {
     private Integer id;
     private String articleTitle;
-    private String articleContent;
     private String publishTime;
     private Integer status;
     private String userName;
@@ -36,14 +35,6 @@ public class ShowArticleVo {
 
     public void setArticleTitle(String articleTitle) {
         this.articleTitle = articleTitle;
-    }
-
-    public String getArticleContent() {
-        return articleContent;
-    }
-
-    public void setArticleContent(String articleContent) {
-        this.articleContent = articleContent;
     }
 
     public String getPublishTime() {
