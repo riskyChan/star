@@ -26,7 +26,8 @@ public class RedisServer {
     private final static String REGISTER_OTP = "register_otp";
     private final static String FIND_PASSWORD_OTP = "forget_password_otp";
     private final static String USER_TOKEN = "user_token";
-    private final static String USER_ARTICLE = "user_article";
+    private final static String USER_ARTICLE = "user_article_finished";
+    private final static String EDITING_USER_ARTICLE = "user_article_editing";
 
     //token exists time
     private final static int TOKEN_TIME = 3600*24*2;
@@ -121,7 +122,7 @@ public class RedisServer {
         return null;
     }
 
-    //设置文章到缓存
+    //设置发布的文章到缓存
     public boolean setUserArticle(String mobile,String data){
         try{
             jedis = jedisPool.getResource();
@@ -136,7 +137,7 @@ public class RedisServer {
         return false;
     }
 
-    //获取缓存里的文章
+    //获取缓存里发布的文章
     public List<String> getUserArticle(String mobile){
         try{
             jedis = jedisPool.getResource();
@@ -149,5 +150,64 @@ public class RedisServer {
             jedis.close();
         }
         return null;
+    }
+
+    //将草稿状态的文章写到缓存
+    public boolean setEditingArticle(String mobile,String data){
+        try{
+            jedis = jedisPool.getResource();
+            String newKey = EDITING_USER_ARTICLE+"_"+mobile;
+            jedis.rpush(newKey,data);
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            jedis.close();
+        }
+        return false;
+    }
+
+    //获取缓存里的草稿文章
+    public List<String> getEditingArticle(String mobile){
+        try{
+            jedis = jedisPool.getResource();
+            String newKey = EDITING_USER_ARTICLE+"_"+mobile;
+            List<String> list = jedis.lrange(newKey,0,-1);
+            return list;
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            jedis.close();
+        }
+        return null;
+    }
+
+    //删除草稿状态的文章
+    public boolean deleteEditingArticle(String mobile,String data){
+        try {
+            jedis = jedisPool.getResource();
+            String newKey = EDITING_USER_ARTICLE+"_"+mobile;
+            jedis.lrem(newKey,0,data);
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            jedis.close();
+        }
+        return false;
+    }
+
+    //删除已发布的文章
+    public boolean deletePublishArticle(String mobile,String data){
+        try {
+            jedis = jedisPool.getResource();
+            String newKey = USER_ARTICLE+"_"+mobile;
+            jedis.lrem(newKey,0,data);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            jedis.close();
+        }
+        return false;
     }
 }

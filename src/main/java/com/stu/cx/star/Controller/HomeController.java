@@ -50,8 +50,18 @@ public class HomeController extends BaseController {
 
     @GetMapping("/getArticle")
     @LoginToken
-    public CommonReturnType getArticle(HttpServletRequest request){
-        List<ShowArticleVo> list = homeService.getArticleList(request);
+    public CommonReturnType getArticle(HttpServletRequest request,@RequestParam(value = "status")Integer status){
+        List<ShowArticleVo> list = homeService.getArticleList(request,status);
         return CommonReturnType.create(list);
+    }
+
+    @GetMapping("/deleteArticle")
+    @LoginToken
+    @Transactional(rollbackFor = Exception.class)
+    public CommonReturnType deleteArticle(HttpServletRequest request,
+                                          @RequestParam(value = "status")Integer status,
+                                          @RequestParam(value = "ids")Integer... ids) throws UserException {
+        homeService.deleteArtilce(request,status,ids);
+        return CommonReturnType.create(null);
     }
 }

@@ -23,5 +23,8 @@ public interface HomeService {
     public void publishArticle(ArticleVo articleVo, HttpServletRequest request) throws UserException;
 
     //获取该用户的文章列表
-    public List<ShowArticleVo> getArticleList(HttpServletRequest request);
+    public List<ShowArticleVo> getArticleList(HttpServletRequest request,Integer status);
+
+    //删除文章
+    public void deleteArtilce(HttpServletRequest request,Integer status,Integer... ids) throws UserException;
 }

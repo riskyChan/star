@@ -6,10 +6,29 @@ package com.stu.cx.star.Controller.Vo;
  * @Date: Create in 17:52 2019/9/26
  */
 public class ShowArticleVo {
+    private Integer id;
     private String articleTitle;
     private String articleContent;
     private String publishTime;
     private Integer status;
+    private String userName;
+
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getArticleTitle() {
         return articleTitle;
